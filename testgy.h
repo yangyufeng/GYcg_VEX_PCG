@@ -3,7 +3,7 @@
 
 #include <math.h>
 
-namespace TestGY {
+// namespace TestGY {
 
     float Add_GY(float a ; float b)
     {   
@@ -12,6 +12,6 @@ namespace TestGY {
         return x;
     }
 
-}
+// }
 
 #endif

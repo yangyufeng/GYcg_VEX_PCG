@@ -3,9 +3,9 @@
 
 #include <math.h>
 
-namespace Math_GYcg {
+// namespace Math_GYcg {
     
-    //基础波动
+    //基础噪波
     float BaseNoise( float seed ; float mul )
     {   
         float x;
@@ -15,7 +15,7 @@ namespace Math_GYcg {
         return x;
     }
 
-}
+// }
 
 
 #endif
