@@ -53,7 +53,7 @@
     }
 
     //旋转功能 //rotate
-    matrix3 rotate_cus(float amount)
+    matrix3 Rotate_Cus(float amount)
     {
         matrix3 ident = maketransform({0,0,1},{0,1,0});
         float angle = amount*360;
@@ -63,7 +63,7 @@
     }
 
     //设置点的旋转值 //setpointattrib orient
-    void rotate_cus_setOrient(float amount ; int ptnum)
+    void RotateCusSetOrient(float amount ; int ptnum)
     {
         matrix3 ident = maketransform({0,0,1},{0,1,0});
         float angle = amount*360;
@@ -71,6 +71,58 @@
 
         setpointattrib(0, "orient", ptnum , ident , "set");
     }
-
     
+    //获取多边形重心,线段中点的坐标 //Finding the center of gravity of a polygon
+    vector Barycenter_Cus( vector Poss[] )
+    {
+        vector V;
+
+        V = Barycenter_G( Poss );
+
+        return V;
+
+    }
+
+    //从法线生成随机贝塞尔23控制点。Seed小于0的时候（例如-1）不进行随机干扰。
+    vector[] CreateBezierCentrolPoint( int ptnum1 ; int ptnum4 ; float Seed )
+    {
+        //23点生成。
+        vector N1,N4,P1,P2,P3,P4;
+        vector ReV[];
+        int Ptnum2,Ptnum3;
+        float ifNoise = 1;
+        float Dis = 0;
+        
+        P1 = point(0,"P",ptnum1);
+        P4 = point(0,"P",ptnum4);
+
+        N1 = point(0,"N",ptnum1);
+        N4 = point(0,"N",ptnum4);
+
+        float noise1 = BaseNoise_Cus(Seed , 3000 , 2 , 1);
+        float noise4 = BaseNoise_Cus(Seed , 3000 , 2 , 27);
+        
+        //当Seed小于0的时候设置控制点1和控制点4之间的距离为1-2，2-3之间的距离
+        if( Seed < 0 )
+        {
+            ifNoise = 0;
+            Dis = distance(P1,P4);
+        }
+
+        P2 = P1 + ( N1 * ( noise1 * 0.5 + 0.5 ) )  * ifNoise + N1 * Dis * 2000; 
+        P3 = P4 - ( N4 * ( noise4 * 0.5  + 0.5 ) ) * ifNoise + N4 * Dis * 2000; 
+
+        Ptnum2 = addpoint(0,P2);
+        Ptnum3 = addpoint(0,P3);
+
+        append(ReV,P1); 
+        append(ReV,P2); 
+        append(ReV,P3); 
+        append(ReV,P4); 
+
+        return ReV;
+
+    }
+
+
 #endif
