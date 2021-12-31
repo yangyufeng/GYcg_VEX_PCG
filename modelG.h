@@ -64,12 +64,13 @@
 
     //设置点的旋转值 //setpointattrib orient
     void RotateCusSetOrient(float amount ; int ptnum)
-    {
-        matrix3 ident = maketransform({0,0,1},{0,1,0});
+    {   
+        //模型Y轴竖直向上时，使用{1,0,0},{0,0,1}作为正交基
+        matrix3 ident = maketransform({1,0,0},{0,0,1});
         float angle = amount*360;
         rotate(ident,radians( angle ),{0,1,0});
 
-        setpointattrib(0, "orient", ptnum , ident , "set");
+        setpointattrib(0, "orient", ptnum , ident , "set");  
     }
     
     //获取多边形重心,线段中点的坐标 //Finding the center of gravity of a polygon
@@ -109,8 +110,8 @@
             Dis = distance(P1,P4);
         }
 
-        P2 = P1 + ( N1 * ( noise1 * 0.5 + 0.5 ) )  * ifNoise + N1 * Dis * 2000; 
-        P3 = P4 - ( N4 * ( noise4 * 0.5  + 0.5 ) ) * ifNoise + N4 * Dis * 2000; 
+        P2 = P1 + ( N1 * ( noise1 * 0.5 + 0.5 ) ) * ifNoise + N1 * Dis * 2000; 
+        P3 = P4 - ( N4 * ( noise4 * 0.5 + 0.5 ) ) * ifNoise + N4 * Dis * 2000; 
 
         Ptnum2 = addpoint(0,P2);
         Ptnum3 = addpoint(0,P3);
