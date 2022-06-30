@@ -2,8 +2,9 @@
 #define __modelG_h__
 
     #include <math.h>
-    #include "mathG.h" 
-    #include "baseG.h"     
+    #include <GYcg/mathG.h> 
+    #include <GYcg/baseG.h>  
+    #include <file.h>   
 
     //基础噪波 //BaseNoise Range(-0.5,0.5)
     float BaseNoise_Cus( float Seed ; float Mul ; float Fre ; float Bias )
@@ -166,6 +167,70 @@
         append(ReV,P4); 
 
         return ReV;
+
+    }
+
+
+    int adjustPrimLength_rePtnum(const int geo, prim; const float currentlength, targetlength)
+    {
+
+        float diff = targetlength - currentlength;
+
+        int points[] = primpoints(geo, prim);
+
+        int ptnum = 0;
+
+        if(diff > 0)
+        {
+            vector posA = point(geo, "P", points[-2]);
+            vector posB = point(geo, "P", points[-1]);
+
+            vector posC = diff * normalize(posB-posA) + posB;
+
+            ptnum = addpoint(geo, posC);
+
+            addvertex(geo, prim, ptnum);
+
+        }
+        else if(diff < 0)
+        {
+            vector lastpos = 0;
+            float length = 0;
+            int cut = 0;
+
+            foreach(int idx; int pt; points)
+            {
+                vector pos = point(geo, "P", pt);
+                if(idx > 0 && !cut)
+                {
+                    float seglength = distance(pos, lastpos);
+
+                    if(length+seglength > targetlength)
+                    {
+                        float frac = (targetlength-length)/seglength;
+
+                        vector newpos = lerp(lastpos, pos, frac);
+
+                        ptnum = addpoint(geo, newpos);
+
+                        for(int i=idx; i<len(points); i++)
+                            removepoint(geo, points[i]);
+
+                        addvertex(geo, prim, ptnum);
+
+                        break;
+                    }
+
+                    length += seglength;
+                }
+
+                lastpos = pos;
+            }
+
+            
+        }
+
+        return ptnum;
 
     }
 

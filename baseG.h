@@ -2,7 +2,7 @@
 #define __base_h__
 
     #include <math.h>
-    #include "mathG.h"  
+    #include <GYcg/mathG.h>
     
     //对于一个点，基于当前位置随机新的位置( 根据一个向量指定方向 )//For a point, random new position based on current position（ in a direction ）
     vector PosRandByVector( float Seed ; float Range ;  vector Pos ; vector Vec  )

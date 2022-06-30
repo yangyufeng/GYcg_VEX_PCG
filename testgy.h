@@ -3,15 +3,15 @@
 
 #include <math.h>
 
-// namespace TestGY {
+    // namespace TestGY {
 
-    float Add_GY(float a ; float b)
-    {   
-        float x;
-        x = a + b;
-        return x;
-    }
+        float Add_GY(float a ; float b)
+        {   
+            float x;
+            x = a + b;
+            return x;
+        }
 
-// }
+    // }
 
 #endif
