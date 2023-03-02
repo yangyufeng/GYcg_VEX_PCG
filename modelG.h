@@ -234,5 +234,121 @@
 
     }
 
+    int[] test( int a ; int b){
+        
+        int c[];
+        
+        append( c , a );
+        append( c , b );
+
+        return c;
+    
+    }
+
+int IsEntityPointInPosReturnPtnum( int Geometry ; vector Pos  )
+{   
+    int Findptnum , re ;
+    vector FindPointPos;
+    float Dis;
+    
+    Findptnum = nearpoint(Geometry , Pos );
+    FindPointPos = point( Geometry , "P" , Findptnum );
+    Dis = distance( Pos , FindPointPos );
+
+    if( Dis < 0.01 ){
+    
+        re = Findptnum;
+    
+    }else{
+    
+        re = -1;
+    
+    }
+    
+    return re;
+    
+}
+
+struct TestStruct{
+
+    int IsTrueSelected = 1 ;
+
+    int CollectPtnum[] = {3,2,1} ;
+
+    int getIsTrueSelected(){
+    
+        return IsTrueSelected;
+    
+    }
+
+    int[] getCollectPtnum(){
+    
+        return CollectPtnum;
+    
+    }
+
+}
+
+struct OverLapData{
+
+    int IsTrueSelected = 1 ;
+
+    int CollectPtnum[] = {} ;
+
+    int getIsTrueSelected(){
+    
+        return IsTrueSelected;
+    
+    }
+
+    int[] getCollectPtnum(){
+    
+        return CollectPtnum;
+    
+    }
+
+}
+
+//OverLap re 0 , not OverLap re 1;
+OverLapData IsOverLap( int CheckPtnum[] ; int CollectPtnum[] ){
+        
+    OverLapData overLapData ;
+    int IsInCollect[] = {};
+    int MinCollect , IsTrueSelected = 1 ;
+
+
+
+    foreach( int v ; CheckPtnum ){
+    
+        if( find( CollectPtnum , v ) >= 0 ){
+    
+            IsTrueSelected = 0 ;
+            append( IsInCollect , -1 );
+
+        }else{
+        
+            append( IsInCollect , 1 ); 
+        }
+
+    }
+
+    MinCollect = min( IsInCollect );
+
+    if( MinCollect != -1){
+    
+        foreach( int n ; CheckPtnum ){
+        
+            append(CollectPtnum , n ); 
+        
+        }
+        
+    }
+    
+    overLapData = OverLapData( IsTrueSelected , CollectPtnum );
+
+    return overLapData ;
+
+}
+
 
 #endif
