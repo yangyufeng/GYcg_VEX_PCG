@@ -275,6 +275,10 @@ struct TestStruct{
 
     int CollectPtnum[] = {3,2,1} ;
 
+    string Struct1[] = { "Mid2Side0" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" };
+
+    //不能用 array( "Mid2Side0" , "Mid2Side0_" ,...)'
+
     int getIsTrueSelected(){
     
         return IsTrueSelected;
@@ -284,6 +288,12 @@ struct TestStruct{
     int[] getCollectPtnum(){
     
         return CollectPtnum;
+    
+    }
+
+    void setCollectPtnum( int array[] ){
+    
+        CollectPtnum = array;
     
     }
 
@@ -304,6 +314,12 @@ struct OverLapData{
     int[] getCollectPtnum(){
     
         return CollectPtnum;
+    
+    }
+
+    void setCollectPtnum( int array[] ){
+    
+        CollectPtnum = array;
     
     }
 
@@ -347,6 +363,71 @@ OverLapData IsOverLap( int CheckPtnum[] ; int CollectPtnum[] ){
     overLapData = OverLapData( IsTrueSelected , CollectPtnum );
 
     return overLapData ;
+
+}
+
+struct CliffPathData{
+
+    string Path = "Assets/Art/prefab/TerrainBlock/";
+    string Postfix = ".prefab" ;
+
+    string Struct1[] = { "Mid2Side0" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" , "Mid2Side0_" };
+    string Struct2[] = { "MidL0R1" , "MidL0R1_TR1" , "MidL0R1_TR0" , "MidL0R1_TR0" , "MidL0R1_TR1" , "MidL0R1_TR0" , "MidL0R1_TR1" , "MidL0R1_TR1_" };
+    string Struct3[] = { "MidL0R2" , "MidL0R2_TR1" , "MidL0R2_" , "MidL0R2_" , "MidL0R2_" , "MidL0R2_" , "MidL0R2_" , "MidL0R2_" };
+    string Struct4[] = { "MidL1R2" , "MidL1R2_" , "MidL1R2_" , "MidL1R2_" , "MidL1R2_" , "MidL1R2" , "MidL1R2_" , "MidL1R2" };
+    string Struct5[] = { "MidL1R0" , "MidL1R0_TR0" , "MidL1R0_TL1" , "MidL1R0_TR0" , "MidL1R0_TR0" , "MidL1R0_TL1" , "MidL1R0_TR1_" , "MidL1R0_TL1" };
+    string Struct6[] = { "MidL2R0" , "MidL2R0_TL1" , "MidL2R0_" , "MidL2R0_" , "MidL2R0_" , "MidL2R0_" , "MidL2R0_" , "MidL2R0_" };
+    string Struct7[] = { "MidL2R1" , "MidL2R1_" , "MidL2R1_" , "MidL2R1_" , "MidL2R1" , "MidL2R1_" , "MidL2R1" , "MidL2R1_" };
+    string Struct8[] = { "MidL1R1" , "MidL1R1_TL1TR0" , "MidL1R1_TL0TR1" , "MidL1R1_TL1TR1" , "MidL1R1_TL1TR0" , "MidL1R1_TL0TR1" , "MidL1R1_TL1TR0" , "MidL1R1_TL0TR1" };
+    string Struct9[] = { "MidL2R2" , "MidL2R2" , "MidL2R2" , "MidL2R2" , "MidL2R2" , "MidL2R2" , "MidL2R2" , "MidL2R2" };
+
+    string getPath( int StructNum ; int CaseNum ){
+        
+        string restr , StructArray[] ;
+        
+        if( StructNum == 1  ){
+        
+            StructArray = Struct1;
+        
+        }else if( StructNum == 2 ){
+        
+            StructArray = Struct2;
+        
+        }else if( StructNum == 3 ){
+        
+            StructArray = Struct3;
+        
+        }else if( StructNum == 4 ){
+        
+            StructArray = Struct4;
+        
+        }else if( StructNum == 5 ){
+        
+            StructArray = Struct5;
+        
+        }else if( StructNum == 6 ){
+        
+            StructArray = Struct6;
+        
+        }else if( StructNum == 7 ){
+        
+            StructArray = Struct7;
+        
+        }else if( StructNum == 8 ){
+        
+            StructArray = Struct8;
+        
+        }else if( StructNum == 9 ){
+        
+            StructArray = Struct9;
+        
+        }
+
+        restr = Path + StructArray[CaseNum] + Postfix;
+
+        return restr;
+    
+    }
 
 }
 
