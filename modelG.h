@@ -431,5 +431,11 @@ struct CliffPathData{
 
 }
 
+void SetOrientToPoint( int PtNum ; float Angle){
+    
+    vector4 Orient = eulertoquaternion(radians(set( 0 , Angle , 0)), 0) ;
+    setpointattrib( 0 , "orient" , PtNum , Orient );
+
+}
 
 #endif
