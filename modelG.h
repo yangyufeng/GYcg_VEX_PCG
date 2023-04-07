@@ -438,4 +438,123 @@ void SetOrientToPoint( int PtNum ; float Angle){
 
 }
 
+//Rock SAA
+
+
+//创建单个随机矩阵
+function matrix CreateRandMat( float Iteration  ; int FractalSize )
+{
+    matrix ReMat = ident();
+    
+    //创建位移
+    /*
+    vector TransPos;
+    int FeasibleRegionNum = int( random_brj( Iteration , Iteration ) * NumFeasibleRegion ) ;
+    TransPos = point(1 , "P" , FeasibleRegionNum);
+    ReMat.xw = TransPos.x ;
+    ReMat.yw = TransPos.y ;
+    ReMat.zw = TransPos.z ;
+    */
+
+    //创建缩放
+    int FractalSizeOut ;
+    if( FractalSize == 1 ){
+        FractalSizeOut = FractalSize;
+        ReMat.xx = fit01( random_brj( Iteration+71.1 , Iteration ) , 0.5 , 0.6 );//0.2~0.6
+        ReMat.yy = fit01( random_brj( Iteration+53.1 , Iteration ) , 0.6 , 0.9 );//0.6~0.9
+        ReMat.zz = fit01( random_brj( Iteration+17.1 , Iteration ) , 0.6 , 0.8 );//0.6~0.8        
+    
+    }else if( FractalSize == 2 ){
+        FractalSizeOut = FractalSize;
+        ReMat.xx = fit01( random_brj(Iteration+45.1 , Iteration ) , 0.3 , 0.5 );//0.2~0.6
+        ReMat.yy = fit01( random_brj(Iteration+57.1 , Iteration ) , 0.3 , 0.65 );//0.6~0.9
+        ReMat.zz = fit01( random_brj(Iteration+19.1 , Iteration ) , 0.4 , 0.6 );//0.6~0.8      
+    
+    }else{
+        FractalSizeOut = 3;
+        ReMat.xx = fit01( random_brj(Iteration+6.1 , Iteration ) , 0.4 , 0.5 );//0.2 , 0.3
+        ReMat.yy = fit01( random_brj(Iteration+81.1 , Iteration ) , 0.3 , 0.65 );//0.2 , 0.3
+        ReMat.zz = fit01( random_brj(Iteration+3.1 , Iteration ) , 0.4 , 0.6 );//0.2 , 0.3          
+    
+    }
+    ReMat.ww = FractalSizeOut;
+
+    //创建旋转
+    float angle1 = radians( (2 * random_brj( Iteration + 97.1 , Iteration ) - 1) * 3  ) ;
+    float angle2 = radians( (2 * random_brj( Iteration + 116.1 , Iteration ) - 1) * 2 ) ;
+    float angle3 = radians( (2 * random_brj( Iteration + 55.1 , Iteration ) - 1) * 20 ) ;
+    
+    ReMat *= dihedral( set( 1 , 0 , 0 ) , set( cos(angle1), sin(angle1) , 0 ) );//Z轴旋转
+    ReMat *= dihedral( set( 0 , 1 , 0 ) , set( 0 , cos(angle2), sin(angle2) ) );//X轴旋转
+    ReMat *= dihedral( set( 0 , 0 , 1 ) , set( sin(angle3), 0 , cos(angle3) ) );//Y轴旋转
+    
+    return ReMat;
+    
+}
+
+//创建分型矩阵s方法
+function matrix[] CreateFractal(float seed ; int NumFractal  )
+{
+
+    matrix reMats[] , reMat;    
+    
+    //分型大小分布
+    float NumGigRate = 0.3;
+    float NumMidRate = 0.3;
+    float NumSmallRate = 0.4;
+    
+    int NumGig = int(NumFractal * NumGigRate) ;
+    int NumMid = int(NumFractal * NumMidRate);
+    int NumSmall = NumFractal - ( NumGig + NumMid );
+    
+    //大
+    for(int i = 0 ; i < NumGig ; i++ ){
+    
+        reMat = CreateRandMat( float( i + seed ) , 1 );
+    
+        append(reMats ,reMat);
+    
+    }
+    
+    //中
+    for(int i = NumGig ; i < ( NumGig + NumMid ) ; i++ ){
+    
+        reMat = CreateRandMat( float( i + seed ) , 2 );
+    
+        append(reMats ,reMat);    
+    
+    }
+    
+    //小
+    for(int i = ( NumGig + NumMid ) ; i < NumFractal ; i++ ){
+        
+        reMat = CreateRandMat( float( i + seed ) , 3 );
+        append(reMats ,reMat);
+    
+    }
+
+    return reMats;
+    
+}
+
+
+//mat to mat3
+
+function matrix3 Mat4ToMat3( matrix Mat )
+{
+    matrix3 ReMat;
+    
+    ReMat = set( 
+                    Mat.xx , Mat.xy , Mat.xz,
+                    Mat.yx , Mat.yy , Mat.yz,
+                    Mat.zx , Mat.zy , Mat.zz
+                    
+                ); 
+    
+    return ReMat;
+}
+
+
+
+
 #endif
