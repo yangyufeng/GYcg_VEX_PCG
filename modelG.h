@@ -554,6 +554,128 @@ function matrix3 Mat4ToMat3( matrix Mat )
     return ReMat;
 }
 
+//计算出一个三角面的三个角的度数
+
+
+//terrainMesh Reduce
+function void GetAcuteTriangPrim( int i ; float Angle ; float AreaPerimeterRateLimit )
+{
+
+    //标记出AcuteTriang，用“AcutePrim”属性 ，i 是面序号
+    int TriangPtnum[] = primpoints(0,i);
+
+    vector Pos0 , Pos1 , Pos2 , Dri0_1 , Dri1_2 , Dri2_0 ,Dri1_0 , Dri2_1 , Dri0_2 ;
+    float cosAngle0 , cosAngle1 , cosAngle2 , Angle0 , Angle1 , Angle2 , Dis0 , Dis1 , Dis2 , DisArray[] ;
+    int argArray[] ;
+
+    Pos0 = point( 0 , "P" , TriangPtnum[0] );
+    Pos1 = point( 0 , "P" , TriangPtnum[1] );
+    Pos2 = point( 0 , "P" , TriangPtnum[2] );
+
+    //将三角边长最长的边所对应的角标记出来
+    Dis0 = distance( Pos1 , Pos2 );
+    Dis1 = distance( Pos0 , Pos2 );
+    Dis2 = distance( Pos0 , Pos1 );
+
+    DisArray = {};
+    append( DisArray , Dis0 );
+    append( DisArray , Dis1 );
+    append( DisArray , Dis2 );
+
+    argArray = argsort(DisArray);
+
+    //printf( "%g\n" , TriangPtnum );
+
+    TriangPtnum = reorder(TriangPtnum,argArray);
+
+    //printf( "%g\n" , TriangPtnum );
+    /*
+    Dri0_1 = normalize( Pos1 - Pos0 );
+    Dri1_0 = normalize( Pos0 - Pos1 );
+
+    Dri1_2 = normalize( Pos1 - Pos2 );
+    Dri2_1 = normalize( Pos2 - Pos1 );
+
+    Dri2_0 = normalize( Pos2 - Pos0 );
+    Dri0_2 = normalize( Pos0 - Pos2 );
+
+    cosAngle0 = dot(Dri0_1 ,Dri0_2 );
+    cosAngle1 = dot(Dri1_2 ,Dri1_0 );
+    cosAngle2 = dot(Dri2_0 ,Dri2_1 );
+
+    Angle0 = acos( cosAngle0 );
+    Angle1 = acos( cosAngle1 );
+    Angle2 = acos( cosAngle2 );
+
+    Angle0 = degrees(Angle0);
+    Angle1 = degrees(Angle1);
+    Angle2 = degrees(Angle2);
+    */
+
+    Pos2 = point( 0 , "P" , TriangPtnum[2] );
+    Pos0 = point( 0 , "P" , TriangPtnum[0] );
+    Pos1 = point( 0 , "P" , TriangPtnum[1] );
+
+    Dri2_0 = normalize( Pos0 - Pos2 );
+    Dri2_1 = normalize( Pos1 - Pos2 );
+
+    cosAngle2 = dot(Dri2_0 ,Dri2_1 );
+    Angle2 = acos( cosAngle2 );
+    Angle2 = degrees(Angle2);
+
+    if( Angle2 < 90 ){
+        
+        Angle2 = 180 - Angle2;
+    
+    }
+
+    //求出面积/周长
+    float area = prim( 0 , "area" , i );
+    float perimeter = prim( 0 , "perimeter" , i );
+
+    float APRate = area / perimeter ;
+
+    //printf("%g\n",Angle2);
+
+    if( Angle2 > Angle ){
+        
+        if( APRate < AreaPerimeterRateLimit ){
+            
+            setprimattrib( 0 ,"AcutePrim", i , 1 );     
+        
+        }
+
+    }
+
+}
+
+function int GetAcuteTrianglesObtusePtnum( int PrimNum )
+{
+    vector Pos0 , Pos1 , Pos2 ;
+    float  Dis0 , Dis1 , Dis2 , DisArray[] ;
+    int argArray[] ;
+
+    int TriangPtnum[] = primpoints(0,PrimNum);
+
+    Pos0 = point( 0 , "P" , TriangPtnum[0] );
+    Pos1 = point( 0 , "P" , TriangPtnum[1] );
+    Pos2 = point( 0 , "P" , TriangPtnum[2] );
+
+    Dis0 = distance( Pos1 , Pos2 );
+    Dis1 = distance( Pos0 , Pos2 );
+    Dis2 = distance( Pos0 , Pos1 );
+
+    DisArray = {};
+    append( DisArray , Dis0 );
+    append( DisArray , Dis1 );
+    append( DisArray , Dis2 );
+
+    argArray = argsort(DisArray);
+    TriangPtnum = reorder(TriangPtnum,argArray);
+
+    return TriangPtnum[2];
+
+}
 
 
 
