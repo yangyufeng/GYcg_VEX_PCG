@@ -689,6 +689,45 @@ function int GetAcuteTrianglesObtusePtnum( int PrimNum )
 
 }
 
+//四舍五入取整
+function int Round( float f )
+{
+    int rounded_value ;
 
+    if( f >= 0 ){
+    
+        rounded_value = int(floor( f + 0.5 ));
+    
+    }else{
+    
+        rounded_value = int(floor( f - 0.5 ));
+    
+    }
+
+    return rounded_value;
+
+}
+
+//array排重
+function int[] uniqueValuesInt( int array[] )
+{
+    int outputArray[] ;
+
+    // Iterate over the input array
+    foreach (int value; array)
+    {
+        // Check if the value already exists in the output array
+        int index = find(outputArray, value);
+
+        // If the value does not exist, add it to the output array
+        if (index < 0)
+        {
+            push(outputArray, value);
+        }
+    }
+
+    return outputArray;
+
+}
 
 #endif
